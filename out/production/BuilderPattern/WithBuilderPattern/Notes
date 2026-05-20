@@ -5,6 +5,3 @@ Builder Pattern helps to:
 Create objects step by step
 Pass only required values
 Avoid constructor confusion
-
-
-NOTES :- in the spring boot @Builder is use for the all the process

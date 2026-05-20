@@ -1,0 +1,190 @@
+Note in the Spring boot for all this process @Component  Annotation
+@Service
+@Repository
+@Controller
+
+Object is create
+
+
+### 🔹 What is Singleton Pattern?
+
+The Singleton Design Pattern ensures that:
+
+* Only **one object (instance)** of a class is created
+* A **global access point** is provided to access that instance
+
+---
+
+### 🔹 Key Characteristics
+
+1. Only one instance of the class exists
+2. The instance is created **only when required (lazy initialization)**
+3. The same instance is returned every time
+
+---
+
+### 🔹 How to Implement Singleton
+
+#### 1. Make Constructor Private
+
+* Prevents object creation using `new`
+* Ensures no external class can instantiate it
+
+#### 2. Create Static Instance Variable
+
+* Holds the single instance of the class
+
+#### 3. Provide Public Static Method
+
+* Returns the instance of the class
+* Creates the instance if it does not exist
+
+---
+
+### 🔹 Basic Implementation (Not Thread-Safe)
+
+```java
+public class Singleton {
+
+    private static Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+---
+
+### ⚠️ Problem in Multithreading
+
+When multiple threads access `getInstance()` at the same time:
+
+* Multiple objects can be created ❌
+* This breaks the Singleton pattern
+
+---
+
+### 🔒 Solution 1: Using Synchronization
+
+```java
+public static synchronized Singleton getInstance() {
+    if (instance == null) {
+        instance = new Singleton();
+    }
+    return instance;
+}
+```
+
+#### ✔ Advantages:
+
+* Thread-safe
+* Ensures only one instance is created
+
+#### ❌ Disadvantages:
+
+* Slower performance
+* Every thread must wait (method is locked)
+
+---
+
+### ⚡ Problem with Synchronization
+
+* Even after object creation, every thread:
+
+  * Has to acquire the lock
+  * Wait if another thread is using the method
+
+👉 This creates **performance overhead**
+
+---
+
+### 🚀 Solution 2: Double-Checked Locking (Best Approach)
+
+```java
+public class Singleton {
+
+    private static volatile Singleton instance;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+---
+
+### 🔹 Why Double-Checked Locking?
+
+1. First check → avoids unnecessary locking
+2. Synchronization → ensures only one thread creates object
+3. Second check → prevents duplicate creation
+
+---
+
+### 🔹 Role of `volatile`
+
+* Ensures changes are visible to all threads
+* Prevents memory inconsistency issues
+
+---
+
+### 🧠 Final Summary
+
+* Singleton ensures **single object creation**
+* Constructor must be **private**
+* Use a **static method** to access instance
+* Not thread-safe by default
+* Use:
+
+  * `synchronized` → safe but slower
+  * `double-checked locking` → safe + efficient ✅
+
+---
+
+### 📌 Interview One-Liner
+
+"Singleton pattern ensures a class has only one instance and provides a global access point to it, with thread safety handled using synchronization or double-checked locking."
+
+
+
+
+
+
+
+
+
+ in the singalton class pattern building  only one object is created of the class
+ when the instance is required that class is provided the instance of that class
+
+ ====================================================================================
+ to create the instance  constructor  of the class must be the private to privent the
+ constructer inisilization at the time of object creation  .
+
+ To get the instance of the class object create a method witch is provided  the instance of the
+ class
+
+****************************************************************************************
+but this is not safe when we introduce the multithreding concept  when the multiple thread
+call the class to create the instance of the method now that time is break the singalton
+
+NOTE :- for that  use Synchronization
+but when we use the  Synchronization there is fallback on the every call  of the different
+thread must wait , bcz some theading is using the  method means it locked by the other thread
+before free the  lock must wait
+
+to remove the rededency must user double checking approach
